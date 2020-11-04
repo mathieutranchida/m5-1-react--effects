@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import cookieSrc from "../cookie.svg";
+import Item from "./Item";
+import useInterval from "../hooks/use-interval.hook"
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -11,30 +13,70 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = useState(100);
+  const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  })
 
+  const handleButtonClick = () => {
+    setNumCookies(numCookies + 1);
+  }
+
+  const handleClick = (item) => {
+    if (numCookies < item.cost) {
+      window.alert("Not enough cookies");
+    } else {
+      setNumCookies(numCookies - item.cost);
+      setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
+    }
+    }
+  
+    const calculateCookiesPerTick = (purchasedItems) => {
+      let autoCookies = purchasedItems.cursor * 1 + purchasedItems.grandma * 10 + purchasedItems.farm * 80;
+      return autoCookies;
+    }
+  
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
+
+  useEffect(() => {
+    document.title = `${numCookies} Cookies - Idle cookie`
+  })
+
+  useEffect(() => {
+    function handleKeydown(ev) {
+      if (ev.code === "Space") {
+        handleButtonClick();
+      }
+    }
+    window.addEventListener("keydown", handleKeydown)
+    return () => {
+      window.removeEventListener("keydown", handleKeydown)
+    }
+  })
+  
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={handleButtonClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((item) => {
+          return <Item item={item} purchasedItems={purchasedItems} handleClick={handleClick}/>
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
