@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 
 
-const Item = ({ item, purchasedItems, handleClick }) => {
+const Item = ({ item, purchasedItems, handleClick, index }) => {
     return (
-        <Wrapper onClick={(ev) => { handleClick(item) }}>
+        <Wrapper onClick={(ev) => { handleClick(item) }} autoFocus={index == 0}>
             <ItemDescription>
                 <Name>{item.name}</Name>
                 <Description>Cost {item.cost} cookies. Preduces {item.value} cookie(s)/second.</Description>
@@ -26,6 +26,9 @@ const Wrapper = styled.button`
     margin-top: 25px;
     margin-right: 0px;
     justify-content: space-between;
+    &:focus {
+        border: 2px solid white;
+    } 
 `;
 
 const ItemDescription = styled.div``;

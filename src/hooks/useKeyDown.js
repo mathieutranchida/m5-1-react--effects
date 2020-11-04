@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 
-const useKeyDown = (key, callback) => {
+const useKeyDown = (keydown, callback) => {
     useEffect(() => {
         function handleKeydown(ev) {
-          if (ev.code === key) {
+          if (ev.code === keydown) {
+            document.activeElement.blur();
             callback();
           }
         }

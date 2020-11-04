@@ -27,6 +27,7 @@ const Game = () => {
   let megaCursorMultiplicator = purchasedItems.megaCursor * 20; 
 
   const handleButtonClick = () => {
+    console.log("handleButtonClick")
     setNumCookies(numCookies + 1 + megaCursorMultiplicator);
   }
 
@@ -51,7 +52,7 @@ const Game = () => {
 
   useDocumentTitle(`${numCookies} Cookies - Idle cookie`)
 
-  useKeyDown("space", handleButtonClick);
+  useKeyDown("Space", handleButtonClick);
   
   return (
     <Wrapper>
@@ -69,8 +70,8 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((item) => {
-          return <Item item={item} purchasedItems={purchasedItems} handleClick={handleClick}/>
+        {items.map((item, index) => {
+          return <Item item={item} purchasedItems={purchasedItems} handleClick={handleClick} index={index}/>
         })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
