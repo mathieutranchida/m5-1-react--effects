@@ -12,6 +12,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "megaCursor", name: "Mega Cursor", cost: 200, value: 20}
 ];
 
 const Game = () => {
@@ -20,10 +21,13 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaCursor: 0,
   })
 
+  let megaCursorMultiplicator = purchasedItems.megaCursor * 20; 
+
   const handleButtonClick = () => {
-    setNumCookies(numCookies + 1);
+    setNumCookies(numCookies + 1 + megaCursorMultiplicator);
   }
 
   const handleClick = (item) => {
@@ -55,7 +59,8 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second <br />
+          <strong>{1 + purchasedItems.megaCursor * 20}</strong> cookies per click
         </Indicator>
         <Button onClick={handleButtonClick}>
           <Cookie src={cookieSrc} />
